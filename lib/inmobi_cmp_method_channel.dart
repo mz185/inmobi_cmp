@@ -9,14 +9,12 @@ class MethodChannelInmobiCmp extends InmobiCmpPlatform {
 
   @override
   Future<void> init({
-    required String accountId,
-    bool gdpr = true,
-    String consentStatus = 'unknown',
+    required String packageId,
+    required String pCode
   }) async {
     await _channel.invokeMethod<void>('init', {
-      'accountId': accountId,
-      'gdpr': gdpr,
-      'consentStatus': consentStatus,
+      'packageId': packageId,
+      'pCode': pCode
     });
   }
 

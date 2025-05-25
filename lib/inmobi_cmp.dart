@@ -4,14 +4,12 @@ import 'inmobi_cmp_platform_interface.dart';
 class InmobiCmp {
   /// Initializes the InMobi CMP SDK.
   static Future<void> init({
-    required String accountId,
-    bool gdpr = true,
-    String consentStatus = 'unknown',
+    required String packageId,
+    required String pCode
   }) {
     return InmobiCmpPlatform.instance.init(
-      accountId: accountId,
-      gdpr: gdpr,
-      consentStatus: consentStatus,
+      packageId: packageId,
+      pCode: pCode
     );
   }
 

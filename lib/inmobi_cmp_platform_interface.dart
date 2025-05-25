@@ -24,9 +24,8 @@ abstract class InmobiCmpPlatform extends PlatformInterface {
 
   /// Initializes the InMobi CMP SDK.
   Future<void> init({
-    required String accountId,
-    bool gdpr = true,
-    String consentStatus = 'unknown',
+    required String packageId,
+    required String pCode
   }) {
     throw UnimplementedError('init() has not been implemented.');
   }

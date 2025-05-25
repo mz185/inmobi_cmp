@@ -5,14 +5,15 @@ import 'package:inmobi_cmp/inmobi_cmp.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await InmobiCmp.init(
-    accountId: 'YOUR_PCODE', // replace with your real pCode
-    gdpr: true,
+    packageId: 'YOUR_PACKAGE_ID',
+    pCode: 'YOUR_P_CODE',
   );
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -29,13 +30,13 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _handleNative(MethodCall call) async {
     switch (call.method) {
-      case 'onCmpLoaded':
-        setState(() => _status = 'CMP Loaded');
-        break;
-      case 'onIABConsent':
-        setState(() => _status = 'IAB Consent Received');
+      case 'onCmpEvent':
+        final String message = call.arguments ?? 'No message';
+        setState(() => _status = message);
+        debugPrint('[InMobi CMP] $message');
         break;
       default:
+        debugPrint('[InMobi CMP] Unknown method call: ${call.method}');
         break;
     }
   }
