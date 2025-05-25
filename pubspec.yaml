@@ -1,0 +1,29 @@
+name: inmobi_cmp
+description: A Flutter plugin for InMobi CMP (GDPR Consent Management Platform)
+version: 0.1.0
+homepage: https://github.com/mz185/inmobi_cmp
+repository: https://github.com/mz185/inmobi_cmp
+issue_tracker: https://github.com/mz185/inmobi_cmp/issues
+publish_to: https://pub.dev
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=2.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.icon.inmobi_cmp
+        pluginClass: InmobiCmpPlugin
+      ios:
+        pluginClass: SwiftInmobiCmpPlugin
