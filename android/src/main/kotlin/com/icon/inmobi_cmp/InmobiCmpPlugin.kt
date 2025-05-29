@@ -2,6 +2,8 @@ package com.icon.inmobi_cmp
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.inmobi.cmp.ChoiceCmp
 import com.inmobi.cmp.ChoiceCmpCallback
 import com.inmobi.cmp.core.model.ACData
@@ -19,7 +21,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class InmobiCmpPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler{
+class InmobiCmpPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
     private lateinit var channel: MethodChannel
     private var applicationContext: Context? = null
     private var activity: Activity? = null
@@ -149,6 +151,8 @@ class InmobiCmpPlugin : FlutterPlugin, ActivityAware, MethodChannel.MethodCallHa
     }
 
     private fun sendLogToFlutter(message: String) {
-        channel.invokeMethod("onCmpEvent", message)
+        Handler(Looper.getMainLooper()).post {
+            channel.invokeMethod("onCmpEvent", message)
+        }
     }
 }
