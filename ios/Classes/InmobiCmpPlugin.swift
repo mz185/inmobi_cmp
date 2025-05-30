@@ -28,13 +28,13 @@ public class SwiftInmobiCmpPlugin: NSObject, FlutterPlugin {
 
   private func initConsent(call: FlutterMethodCall, result: FlutterResult) {
     guard let args = call.arguments as? [String: Any],
-          let pCode = args["accountId"] as? String else {
+          let pCode = args["pCode"] as? String else {
       result(FlutterError(code: "INIT_ERROR", message: "Missing pCode", details: nil))
       return
     }
-    // Initialize CMP via shared singleton
-    ChoiceCmp.shared.startChoice(pcode: pCode,
-                                 delegate: self)
+
+    // Start CMP
+    ChoiceCmp.shared.startChoice(pcode: pCode, delegate: self)
     result(nil)
   }
 
@@ -46,18 +46,20 @@ public class SwiftInmobiCmpPlugin: NSObject, FlutterPlugin {
   }
 
   private func getConsentStatus(result: FlutterResult) {
-    // Async fetch GDPR data
     ChoiceCmp.shared.getGDPRDataWithCompletion { gdprData in
-      if let data = gdprData {
+      if gdprData != nil {
         result("gdpr_data_available")
+      } else if ChoiceCmp.shared.getNonIABData() != nil {
+        result("non_iab_data_available")
       } else {
-        // Fallback: check non-IAB data
-        if let nonIab = ChoiceCmp.shared.getNonIABData() {
-          result("non_iab_data_available")
-        } else {
-          result("no_consent_data")
-        }
+        result("no_consent_data")
       }
+    }
+  }
+
+  private func sendLogToFlutter(_ message: String) {
+    DispatchQueue.main.async {
+      self.channel?.invokeMethod("onCmpEvent", arguments: message)
     }
   }
 }
@@ -65,43 +67,38 @@ public class SwiftInmobiCmpPlugin: NSObject, FlutterPlugin {
 // MARK: - ChoiceCmpDelegate
 extension SwiftInmobiCmpPlugin: ChoiceCmpDelegate {
   public func cmpDidLoadWithInfo(_ info: PingResponse) {
-    let map = [
-      "cmpLoaded": info.cmpLoaded,
-      "apiVersion": info.apiVersion
-    ] as [String : Any]
-    channel?.invokeMethod("onCmpLoaded", arguments: map)
-  }
-
-  public func didReceiveIABVendorConsentWithGdprData(_ gdprData: GDPRData, updated: Bool) {
-    // forward details as needed
-    channel?.invokeMethod("onIABConsent", arguments: ["updated": updated, "tcString": gdprData.tcString])
-  }
-
-  public func didReceiveNonIABVendorConsentWithNonIabData(_ nonIabData: NonIABData, updated: Bool) {
-    channel?.invokeMethod("onNonIABConsent", arguments: ["updated": updated, "consent": nonIabData.consent])
-  }
-
-  public func didReceiveAdditionalConsentWithAcData(_ acData: ACData, updated: Bool) {
-    channel?.invokeMethod("onAdditionalConsent", arguments: ["updated": updated, "acString": acData.acString])
-  }
-
-  public func cmpDidErrorWithError(_ error: Error) {
-    channel?.invokeMethod("onCmpError", arguments: ["error": error.localizedDescription])
-  }
-
-  public func didReceiveUSRegulationsConsentWithUsRegData(_ usRegData: USRegulationsData) {
-    channel?.invokeMethod("onUSRegulationsConsent", arguments: ["gppString": usRegData.gppString])
-  }
-
-  public func didReceiveActionButtonTapWithAction(_ action: ActionButtons) {
-    channel?.invokeMethod("onActionButtonClicked", arguments: ["action": action.rawValue])
+    sendLogToFlutter("CMP loaded: \(info)")
   }
 
   public func cmpUIStatusChangedWithInfo(_ info: DisplayInfo) {
-    channel?.invokeMethod("onUIStatusChanged", arguments: ["status": info.displayStatus.rawValue])
+    sendLogToFlutter("CMP UI status changed: \(info)")
+  }
+
+  public func cmpDidErrorWithError(_ error: Error) {
+    sendLogToFlutter("CMP error: \(error.localizedDescription)")
+  }
+
+  public func didReceiveIABVendorConsentWithGdprData(_ gdprData: GDPRData, updated: Bool) {
+    sendLogToFlutter("IAB vendor consent given: updated=\(updated), tcString=\(gdprData.tcString)")
+  }
+
+  public func didReceiveNonIABVendorConsentWithNonIabData(_ nonIabData: NonIABData, updated: Bool) {
+    sendLogToFlutter("Non-IAB vendor consent given: updated=\(updated), consent=\(nonIabData.consent)")
+  }
+
+  public func didReceiveAdditionalConsentWithAcData(_ acData: ACData, updated: Bool) {
+    sendLogToFlutter("Google vendor consent given: updated=\(updated), acString=\(acData.acString)")
+  }
+
+  public func didReceiveUSRegulationsConsentWithUsRegData(_ usRegData: USRegulationsData) {
+    sendLogToFlutter("US regulations consent received: gppString=\(usRegData.gppString)")
+  }
+
+  public func didReceiveActionButtonTapWithAction(_ action: ActionButtons) {
+    sendLogToFlutter("Action button clicked: \(action.rawValue)")
   }
 
   public func userDidMoveToOtherState() {
-    channel?.invokeMethod("onUserMovedState", arguments: nil)
+    sendLogToFlutter("User moved to another state")
   }
 }
