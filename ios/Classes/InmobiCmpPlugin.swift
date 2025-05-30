@@ -70,7 +70,7 @@ extension SwiftInmobiCmpPlugin: ChoiceCmpDelegate {
     sendLogToFlutter("IAB vendor consent given: updated=\(updated), tcString=\(gdprData.tcString)")
   }
 
-  public func didRecieveNonIABVendorConsent(nonIabData: NonIABData, updated: Bool) {
+  public func didReceiveNonIABVendorConsent(nonIabData: NonIABData, updated: Bool) {
     sendLogToFlutter("Non-IAB vendor consent given: updated=\(updated), consent=\(nonIabData.consent)")
   }
 
