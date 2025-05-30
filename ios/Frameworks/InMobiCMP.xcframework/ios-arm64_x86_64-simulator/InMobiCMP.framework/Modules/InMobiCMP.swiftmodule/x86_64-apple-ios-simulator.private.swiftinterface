@@ -1,0 +1,413 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9.2 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name InMobiCMP
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AdSupport
+import AppTrackingTransparency
+import CommonCrypto
+import DeveloperToolsSupport
+import Foundation
+@_exported import InMobiCMP
+import Swift
+import SwiftUI
+import UIKit
+import WebKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+extension InMobiCMP.ChoiceCmp {
+  @objc dynamic public func showUSRegulations(ccpaDelegate: (any InMobiCMP.CCPADelegate)?)
+  @available(*, deprecated, message: "Please use showUSRegulations(ccpaDelegate:) to show MSPA/CCPA popup")
+  @objc dynamic public func showCCPA(ccpaDelegate: (any InMobiCMP.CCPADelegate)?)
+  @available(*, deprecated, message: "Please use showUSRegulations(ccpaDelegate:) to show MSPA/CCPA popup")
+  @objc dynamic public func startCCPA(pcode: Swift.String, ccpaDelegate: (any InMobiCMP.CCPADelegate)? = nil)
+}
+@objc public enum DisplayStatus : Swift.Int {
+  case visible
+  case hidden
+  case disabled
+  case dismissed
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class USRegulationsData : ObjectiveC.NSObject, Swift.Codable {
+  @objc public var Version: Swift.Int
+  @objc public var gppString: Swift.String
+  @objc public var SharingNotice: Swift.Int
+  @objc public var SaleOptOutNotice: Swift.Int
+  @objc public var SharingOptOutNotice: Swift.Int
+  @objc public var TargetedAdvertisingOptOutNotice: Swift.Int
+  @objc public var SensitiveDataProcessingOptOutNotice: Swift.Int
+  @objc public var SensitiveDataLimitUseNotice: Swift.Int
+  @objc public var SaleOptOut: Swift.Int
+  @objc public var SharingOptOut: Swift.Int
+  @objc public var TargetedAdvertisingOptOut: Swift.Int
+  @objc public var SensitiveDataProcessing: [Swift.Int]
+  @objc public var KnownChildSensitiveDataConsents: [Swift.Int]
+  @objc public var PersonalDataConsents: Swift.Int
+  @objc public var MspaCoveredTransaction: Swift.Int
+  @objc public var MspaOptOutOptionMode: Swift.Int
+  @objc public var MspaServiceProviderMode: Swift.Int
+  @objc override dynamic public init()
+  @objc deinit
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
+}
+@objc public enum ActionButtons : Swift.Int {
+  case action1 = 1
+  case action2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public typealias Restrictions = [Swift.Int : [Swift.Int : Swift.Int]]
+public enum ConsentLanguage : Swift.String, Swift.CaseIterable {
+  case BG
+  case CS
+  case DA
+  case DE
+  case EL
+  case EN
+  case ES
+  case ET
+  case FI
+  case FR
+  case HR
+  case HU
+  case IT
+  case LT
+  case LV
+  case MT
+  case NL
+  case NO
+  case NB
+  case PL
+  case PT
+  case RO
+  case RU
+  case SK
+  case SL
+  case SV
+  case UK
+  case TR
+  case JA
+  case KO
+  case ID
+  case ZH
+  case VI
+  case TH
+  case HI
+  case MS
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [InMobiCMP.ConsentLanguage]
+  public typealias RawValue = Swift.String
+  public static var allCases: [InMobiCMP.ConsentLanguage] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@objc public protocol CCPADelegate {
+  @objc func didReceiveCCPAConsent(string: Swift.String)
+}
+@objc public enum PrivacyEncodingMode : Swift.Int {
+  case tcf
+  case gpp
+  case tcfAndGpp
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol GoogleBasicConsentDelegate {
+  @objc func didReceiveGoogleBasicConsentChange(consents: InMobiCMP.GoogleBasicConsents)
+}
+public typealias BooleanVector = [Swift.String : Swift.Bool]
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class NonIABData : ObjectiveC.NSObject {
+  @objc final public let gdprApplies: Swift.Bool
+  @objc final public let nonIabVendorConsents: [Swift.Int : Swift.Bool]
+  @objc final public let consent: Swift.String
+  public init(gdprApplies: Swift.Bool, hasGlobalConsent: Swift.Bool, hasGlobalScope: Swift.Bool, metadata: Swift.String, nonIabVendorConsents: [Swift.Int : Swift.Bool], consent: Swift.String)
+  @objc deinit
+}
+@objc public enum CMPUserInterfaceStyle : Swift.Int, Swift.CaseIterable {
+  case auto = 0
+  case light = 1
+  case dark = 2
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [InMobiCMP.CMPUserInterfaceStyle]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [InMobiCMP.CMPUserInterfaceStyle] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc public class GDPRData : ObjectiveC.NSObject {
+  @objc public var tcString: Swift.String
+  @objc public var gppString: Swift.String
+  @objc final public let tcfPolicyVersion: Swift.Int
+  @objc public var cmpId: Swift.Int
+  @objc public var cmpVersion: Swift.Int
+  @objc public var privacyEncodingMode: InMobiCMP.PrivacyEncodingMode {
+    @objc get
+  }
+  public var gdprApplies: Swift.Bool?
+  @objc public var gdprAppliesIsKnown: Swift.Bool {
+    @objc get
+  }
+  @available(swift, obsoleted: 0.1)
+  @objc public var doesGdprApply: Swift.Bool {
+    @objc get
+  }
+  @objc public var eventStatus: InMobiCMP.EventStatus
+  @objc public var cmpStatus: InMobiCMP.CmpStatus
+  @objc public var isServiceSpecific: Swift.Bool
+  @objc public var useNonStandardStacks: Swift.Bool
+  @objc public var publisherCC: Swift.String
+  @objc public var purposeOneTreatment: Swift.Bool
+  @objc public var purpose: InMobiCMP.GDPRData.ConsentAndLI
+  @objc public var vendor: InMobiCMP.GDPRData.ConsentAndLI
+  @objc public var specialFeatureOptins: InMobiCMP.BooleanVector
+  @objc public var publisher: InMobiCMP.GDPRData.Publisher
+  @_hasMissingDesignatedInitializers @objc public class ConsentAndLI : ObjectiveC.NSObject {
+    @objc final public let consents: InMobiCMP.BooleanVector
+    @objc final public let legitimateInterests: InMobiCMP.BooleanVector
+    @objc deinit
+  }
+  @_hasMissingDesignatedInitializers @objc public class Publisher : ObjectiveC.NSObject {
+    @objc final public let vendorID: Swift.Int
+    @objc final public let consents: InMobiCMP.BooleanVector
+    @objc final public let legitimateInterests: InMobiCMP.BooleanVector
+    @objc final public let customPurpose: InMobiCMP.GDPRData.ConsentAndLI
+    @objc final public let restrictions: InMobiCMP.Restrictions
+    @objc deinit
+  }
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class ChoiceColor : ObjectiveC.NSObject {
+  @objc public var dividerColor: Swift.String?
+  @objc public var tabBackgroundColor: Swift.String?
+  @objc public var searchBarBackgroundColor: Swift.String?
+  @objc public var searchBarForegroundColor: Swift.String?
+  @objc public var infoButtonForegroundColor: Swift.String?
+  @objc public var toggleActiveColor: Swift.String?
+  @objc public var toggleInactiveColor: Swift.String?
+  @objc public var globalBackgroundColor: Swift.String?
+  @objc public var titleTextColor: Swift.String?
+  @objc public var bodyTextColor: Swift.String?
+  @objc public var tabTextColor: Swift.String?
+  @objc public var menuTextColor: Swift.String?
+  @objc public var linkTextColor: Swift.String?
+  @objc public var buttonTextColor: Swift.String?
+  @objc public var buttonDisabledTextColor: Swift.String?
+  @objc public var buttonBackgroundColor: Swift.String?
+  @objc public var buttonDisabledBackgroundColor: Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class GoogleBasicConsents : ObjectiveC.NSObject {
+  @objc public var adStorage: InMobiCMP.GoogleBasicConsentValue
+  @objc public var adUserData: InMobiCMP.GoogleBasicConsentValue
+  @objc public var adPersonalization: InMobiCMP.GoogleBasicConsentValue
+  @objc public var analyticsStorage: InMobiCMP.GoogleBasicConsentValue
+  @objc deinit
+}
+@objc public enum GoogleBasicConsentValue : Swift.Int {
+  case denied, granted
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class DisplayInfo : ObjectiveC.NSObject {
+  @objc final public let displayStatus: InMobiCMP.DisplayStatus
+  @objc final public let displayMessage: Swift.String
+  @objc final public let gbcShown: Swift.Bool
+  @objc final public let regulationShown: InMobiCMP.Regulations
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class PingResponse : ObjectiveC.NSObject {
+  final public let gdprApplies: Swift.Bool?
+  @objc public var gdprAppliesIsKnown: Swift.Bool {
+    @objc get
+  }
+  @objc final public let usRegulationApplies: Swift.Bool
+  @available(*, unavailable)
+  @objc public var doesGdprApply: Swift.Bool {
+    @objc get
+  }
+  @objc final public let cmpLoaded: Swift.Bool
+  @objc final public let cmpStatus: InMobiCMP.CmpStatus
+  @objc final public let displayStatus: InMobiCMP.DisplayStatus
+  @objc final public let apiVersion: Swift.String
+  @objc final public let cmpVersion: Swift.Int
+  @objc final public let cmpId: Swift.Int
+  @objc final public let gvlVersion: Swift.Int
+  @objc final public let tcfPolicyVersion: Swift.Int
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class ChoiceGeolocation : ObjectiveC.NSObject {
+  @objc final public let country: Swift.String, region: Swift.String, city: Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class GVL {
+  final public let defaultBaseUrl: Swift.String
+  public var defaultLanguage: InMobiCMP.ConsentLanguage
+  public static var consentLanguages: [Swift.String] {
+    get
+  }
+  public func constructor(versionOrVendorList: Any)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class ChoiceFont : ObjectiveC.NSObject {
+  @objc public var fontName: Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class ACData : ObjectiveC.NSObject {
+  @objc final public let gdprApplies: Swift.Bool
+  @objc final public let acString: Swift.String
+  @objc final public let additionalVendorConsent: [Swift.Int : Swift.Bool]
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class ChoiceCmp : ObjectiveC.NSObject {
+  @objc public static let shared: InMobiCMP.ChoiceCmp
+  @objc public func setUserLoginOrSubscriptionStatus(_ value: Swift.Bool)
+  @objc public var sdkVersion: Swift.String {
+    @objc get
+  }
+  @objc public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, ccpaDelegate: (any InMobiCMP.CCPADelegate)? = nil, gbcDelegate: (any InMobiCMP.GoogleBasicConsentDelegate)? = nil, shouldDisplayIDFA: Swift.Bool = true, style: InMobiCMP.ChoiceStyle? = nil)
+  @objc public func forceDisplayUI()
+  public func getVendorList() -> InMobiCMP.GVL?
+  @available(*, deprecated, message: "Please use getGDPRData(completion: ) to retrieve the TCString")
+  @objc public func getTCString(completion: @escaping (Swift.String) -> Swift.Void)
+  @available(*, deprecated, message: "Please use getGDPRData(completion: ) to retrieve the GPP String")
+  @objc public func getGPPString(completion: @escaping (Swift.String) -> Swift.Void)
+  @objc public func getGDPRData(completion: @escaping (InMobiCMP.GDPRData) -> Swift.Void)
+  @objc public func getNonIABData() -> InMobiCMP.NonIABData?
+  @objc public func getACData() -> InMobiCMP.ACData?
+  @objc public func getGeolocation() -> InMobiCMP.ChoiceGeolocation?
+  @objc public func ping() -> InMobiCMP.PingResponse
+  @objc deinit
+}
+extension InMobiCMP.ChoiceCmp {
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate)
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, gbcDelegate: any InMobiCMP.GoogleBasicConsentDelegate)
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, ccpaDelegate: any InMobiCMP.CCPADelegate)
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, ccpaDelegate: any InMobiCMP.CCPADelegate, gbcDelegate: any InMobiCMP.GoogleBasicConsentDelegate)
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, ccpaDelegate: any InMobiCMP.CCPADelegate, shouldDisplayIDFA: Swift.Bool)
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, ccpaDelegate: any InMobiCMP.CCPADelegate, gbcDelegate: any InMobiCMP.GoogleBasicConsentDelegate, shouldDisplayIDFA: Swift.Bool)
+  @objc dynamic public func startChoice(pcode: Swift.String, delegate: any InMobiCMP.ChoiceCmpDelegate, ccpaDelegate: any InMobiCMP.CCPADelegate, shouldDisplayIDFA: Swift.Bool, style: InMobiCMP.ChoiceStyle)
+}
+extension Foundation.Date {
+  public static func daysBetween(start: Foundation.Date, end: Foundation.Date) -> Swift.Int
+  public static func hoursBetween(start: Foundation.Date, end: Foundation.Date) -> Swift.Int
+}
+@objc public enum EventStatus : Swift.Int {
+  case tcloaded
+  case cmpuishown
+  case useractioncomplete
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum CmpStatus : Swift.Int {
+  case stub
+  case loading
+  case loaded
+  case error
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum Regulations : Swift.Int {
+  case gdpr
+  case mspa
+  case ccpa
+  case na
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension InMobiCMP.ChoiceCmp {
+  @objc dynamic public func showGoogleBasicConsent(delegate: (any InMobiCMP.GoogleBasicConsentDelegate)?)
+}
+@objc public protocol ChoiceCmpDelegate {
+  @objc func cmpDidLoad(info: InMobiCMP.PingResponse)
+  @objc func didReceiveIABVendorConsent(gdprData: InMobiCMP.GDPRData, updated: Swift.Bool)
+  @objc func didReceiveNonIABVendorConsent(nonIabData: InMobiCMP.NonIABData, updated: Swift.Bool)
+  @objc func didReceiveAdditionalConsent(acData: InMobiCMP.ACData, updated: Swift.Bool)
+  @objc func cmpDidError(error: any Swift.Error)
+  @objc func didReceiveUSRegulationsConsent(usRegData: InMobiCMP.USRegulationsData)
+  @objc func didReceiveActionButtonTap(action: InMobiCMP.ActionButtons)
+  @objc func cmpUIStatusChanged(info: InMobiCMP.DisplayInfo)
+  @objc func userDidMoveToOtherState()
+}
+@objc public class ChoiceStyle : ObjectiveC.NSObject {
+  @objc public var regularFont: InMobiCMP.ChoiceFont?
+  @objc public var boldFont: InMobiCMP.ChoiceFont?
+  @objc public var lightModeColors: InMobiCMP.ChoiceColor?
+  @available(iOS 12.0, *)
+  @objc public var preferredThemeMode: InMobiCMP.CMPUserInterfaceStyle {
+    @objc get
+    @objc set
+  }
+  @available(iOS 12.0, *)
+  @objc public var darkModeColors: InMobiCMP.ChoiceColor? {
+    @objc get
+    @objc set
+  }
+  @available(iOS 12.0, *)
+  @objc public init(preferredThemeMode: InMobiCMP.CMPUserInterfaceStyle, lightModeColors: InMobiCMP.ChoiceColor? = nil, darkModeColors: InMobiCMP.ChoiceColor? = nil, regularFont: InMobiCMP.ChoiceFont? = nil, boldFont: InMobiCMP.ChoiceFont? = nil)
+  @available(iOS 12.0, *)
+  @objc public init(lightModeColors: InMobiCMP.ChoiceColor? = nil, darkModeColors: InMobiCMP.ChoiceColor? = nil, regularFont: InMobiCMP.ChoiceFont? = nil, boldFont: InMobiCMP.ChoiceFont? = nil)
+  @available(iOS 12.0, *)
+  @objc public init(lightModeColors: InMobiCMP.ChoiceColor? = nil, darkModeColors: InMobiCMP.ChoiceColor? = nil)
+  @objc public init(lightModeColors: InMobiCMP.ChoiceColor?, regularFont: InMobiCMP.ChoiceFont? = nil, boldFont: InMobiCMP.ChoiceFont? = nil)
+  @objc public init(lightModeColors: InMobiCMP.ChoiceColor?)
+  @objc public init(regularFont: InMobiCMP.ChoiceFont? = nil, boldFont: InMobiCMP.ChoiceFont? = nil)
+  @objc deinit
+}
+extension InMobiCMP.DisplayStatus : Swift.Equatable {}
+extension InMobiCMP.DisplayStatus : Swift.Hashable {}
+extension InMobiCMP.DisplayStatus : Swift.RawRepresentable {}
+extension InMobiCMP.ActionButtons : Swift.Equatable {}
+extension InMobiCMP.ActionButtons : Swift.Hashable {}
+extension InMobiCMP.ActionButtons : Swift.RawRepresentable {}
+extension InMobiCMP.ConsentLanguage : Swift.Equatable {}
+extension InMobiCMP.ConsentLanguage : Swift.Hashable {}
+extension InMobiCMP.ConsentLanguage : Swift.RawRepresentable {}
+extension InMobiCMP.PrivacyEncodingMode : Swift.Equatable {}
+extension InMobiCMP.PrivacyEncodingMode : Swift.Hashable {}
+extension InMobiCMP.PrivacyEncodingMode : Swift.RawRepresentable {}
+extension InMobiCMP.CMPUserInterfaceStyle : Swift.Equatable {}
+extension InMobiCMP.CMPUserInterfaceStyle : Swift.Hashable {}
+extension InMobiCMP.CMPUserInterfaceStyle : Swift.RawRepresentable {}
+extension InMobiCMP.GoogleBasicConsentValue : Swift.Equatable {}
+extension InMobiCMP.GoogleBasicConsentValue : Swift.Hashable {}
+extension InMobiCMP.GoogleBasicConsentValue : Swift.RawRepresentable {}
+extension InMobiCMP.EventStatus : Swift.Equatable {}
+extension InMobiCMP.EventStatus : Swift.Hashable {}
+extension InMobiCMP.EventStatus : Swift.RawRepresentable {}
+extension InMobiCMP.CmpStatus : Swift.Equatable {}
+extension InMobiCMP.CmpStatus : Swift.Hashable {}
+extension InMobiCMP.CmpStatus : Swift.RawRepresentable {}
+extension InMobiCMP.Regulations : Swift.Equatable {}
+extension InMobiCMP.Regulations : Swift.Hashable {}
+extension InMobiCMP.Regulations : Swift.RawRepresentable {}

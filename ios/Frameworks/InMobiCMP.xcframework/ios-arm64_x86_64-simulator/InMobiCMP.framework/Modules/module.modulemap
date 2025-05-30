@@ -1,0 +1,11 @@
+framework module InMobiCMP {
+  umbrella header "InMobiCMP.h"
+  export *
+
+  module * { export * }
+}
+
+module InMobiCMP.Swift {
+  header "InMobiCMP-Swift.h"
+  requires objc
+}
