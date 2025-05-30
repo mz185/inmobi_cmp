@@ -47,17 +47,14 @@ public class SwiftInmobiCmpPlugin: NSObject, FlutterPlugin {
     
     private func getConsentStatus(result: @escaping FlutterResult) {
         ChoiceCmp.shared.getGDPRData { gdprData in
-            // if tcString is non-empty, we have stored IAB-vendor data
-            if !gdprData.tcString.isEmpty {
-                result("gdpr_data_available")
-            }
-            // otherwise fall back to checking non-IAB data
-            else if let _ = ChoiceCmp.shared.getNonIABData() {
-                result("non_iab_data_available")
-            }
-            // and if neither has anything, report “no_consent_data”
-            else {
-                result("no_consent_data")
+            DispatchQueue.main.async {
+                if !gdprData.tcString.isEmpty {
+                    result("gdpr_data_available")
+                } else if let _ = ChoiceCmp.shared.getNonIABData() {
+                    result("non_iab_data_available")
+                } else {
+                    result("no_consent_data")
+                }
             }
         }
     }
