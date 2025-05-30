@@ -66,39 +66,39 @@ public class SwiftInmobiCmpPlugin: NSObject, FlutterPlugin {
 
 // MARK: - ChoiceCmpDelegate
 extension SwiftInmobiCmpPlugin: ChoiceCmpDelegate {
-  public func cmpDidLoadWithInfo(_ info: PingResponse) {
-    sendLogToFlutter("CMP loaded: \(info)")
-  }
-
-  public func cmpUIStatusChangedWithInfo(_ info: DisplayInfo) {
-    sendLogToFlutter("CMP UI status changed: \(info)")
-  }
-
-  public func cmpDidErrorWithError(_ error: Error) {
-    sendLogToFlutter("CMP error: \(error.localizedDescription)")
-  }
-
-  public func didReceiveIABVendorConsentWithGdprData(_ gdprData: GDPRData, updated: Bool) {
+  public func didReceiveIABVendorConsent(gdprData: GDPRData, updated: Bool) {
     sendLogToFlutter("IAB vendor consent given: updated=\(updated), tcString=\(gdprData.tcString)")
   }
 
-  public func didReceiveNonIABVendorConsentWithNonIabData(_ nonIabData: NonIABData, updated: Bool) {
+  public func didRecieveNonIABVendorConsent(nonIabData: NonIABData, updated: Bool) {
     sendLogToFlutter("Non-IAB vendor consent given: updated=\(updated), consent=\(nonIabData.consent)")
   }
 
-  public func didReceiveAdditionalConsentWithAcData(_ acData: ACData, updated: Bool) {
+  public func didReceiveAdditionalConsent(acData: ACData, updated: Bool) {
     sendLogToFlutter("Google vendor consent given: updated=\(updated), acString=\(acData.acString)")
   }
 
-  public func didReceiveUSRegulationsConsentWithUsRegData(_ usRegData: USRegulationsData) {
-    sendLogToFlutter("US regulations consent received: gppString=\(usRegData.gppString)")
+  public func didReceiveCCPAConsent(string: String) {
+    sendLogToFlutter("CCPA Consent given: \(string)")
   }
 
-  public func didReceiveActionButtonTapWithAction(_ action: ActionButtons) {
-    sendLogToFlutter("Action button clicked: \(action.rawValue)")
+  public func cmpDidError(error: Error) {
+    sendLogToFlutter("CMP error: \(error.localizedDescription)")
+  }
+
+  public func didReceiveUSRegulationsConsent(usRegData: USRegulationsData) {
+    sendLogToFlutter("US regulations consent received: gppString=\(usRegData.gppString)")
   }
 
   public func userDidMoveToOtherState() {
     sendLogToFlutter("User moved to another state")
+  }
+
+  public func cmpUIStatusChanged(info: DisplayInfo) {
+    sendLogToFlutter("CMP UI status changed: \(info)")
+  }
+
+  public func didReceiveActionButtonTap(action: ActionButtons) {
+    sendLogToFlutter("Action button clicked: \(action.rawValue)")
   }
 }
