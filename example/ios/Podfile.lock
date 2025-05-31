@@ -1,0 +1,28 @@
+PODS:
+  - Flutter (1.0.0)
+  - inmobi_cmp (0.1.0):
+    - Flutter
+  - integration_test (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - inmobi_cmp (from `.symlinks/plugins/inmobi_cmp/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  inmobi_cmp:
+    :path: ".symlinks/plugins/inmobi_cmp/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  inmobi_cmp: feb60bebcfb5c6feaddf27fd504b5ccdf5d8a060
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
+
+PODFILE CHECKSUM: 53a6aebc29ccee84c41f92f409fc20cd4ca011f1
+
+COCOAPODS: 1.16.2
