@@ -73,19 +73,19 @@ extension SwiftInmobiCmpPlugin: ChoiceCmpDelegate {
     }
     
     public func didReceiveIABVendorConsent(gdprData: GDPRData, updated: Bool) {
-        sendLogToFlutter("IAB vendor consent given: updated=\(updated), tcString=\(gdprData.tcString)")
+        sendLogToFlutter("IAB vendor consent given: updated=\(updated).")
     }
     
     public func didReceiveNonIABVendorConsent(nonIabData: NonIABData, updated: Bool) {
-        sendLogToFlutter("Non-IAB vendor consent given: updated=\(updated), consent=\(nonIabData.consent)")
+        sendLogToFlutter("Non-IAB vendor consent given: updated=\(updated).")
     }
     
     public func didReceiveAdditionalConsent(acData: ACData, updated: Bool) {
-        sendLogToFlutter("Google vendor consent given: updated=\(updated), acString=\(acData.acString)")
+        sendLogToFlutter("Google vendor consent given: updated=\(updated).")
     }
     
     public func didReceiveCCPAConsent(string: String) {
-        sendLogToFlutter("CCPA Consent given: \(string)")
+        sendLogToFlutter("CCPA Consent given.")
     }
     
     public func cmpDidError(error: Error) {
@@ -93,18 +93,18 @@ extension SwiftInmobiCmpPlugin: ChoiceCmpDelegate {
     }
     
     public func didReceiveUSRegulationsConsent(usRegData: USRegulationsData) {
-        sendLogToFlutter("US regulations consent received: gppString=\(usRegData.gppString)")
+        sendLogToFlutter("US regulations consent received.")
     }
     
     public func userDidMoveToOtherState() {
-        sendLogToFlutter("User moved to another state")
+        sendLogToFlutter("User moved to another state.")
     }
     
     public func cmpUIStatusChanged(info: DisplayInfo) {
-        sendLogToFlutter("CMP UI status changed: \(info)")
+        sendLogToFlutter("CMP UI status changed.")
     }
     
     public func didReceiveActionButtonTap(action: ActionButtons) {
-        sendLogToFlutter("Action button clicked: \(action.rawValue)")
+        sendLogToFlutter("Action button clicked.")
     }
 }
