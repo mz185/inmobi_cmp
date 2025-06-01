@@ -1,16 +1,15 @@
 # InMobi CMP Plugin
 
-A Flutter plugin to integrate the InMobi Consent Management Platform (CMP) for GDPR/CCPA compliance
-on **Android** and **iOS**.
+A Flutter plugin to integrate the InMobi Consent Management Platform (CMP) for GDPR/CCPA compliance on **Android** and **iOS**.
 
 ---
 
 ## 🚀 Features
 
-- **Initialize** the InMobi CMP SDK from Dart
-- **Show** consent UI flows
+- **Initialize** the InMobi CMP SDK with package ID and pCode
+- **Display** consent UI
 - **Retrieve** consent status
-- **Listen** to native consent events via MethodChannel
+- **Receive** native consent lifecycle events via `MethodChannel`
 
 ---
 
@@ -26,7 +25,7 @@ dependencies:
       ref: main
 ```
 
-Run:
+Then run:
 
 ```bash
 flutter pub get
@@ -34,7 +33,7 @@ flutter pub get
 
 ---
 
-## 🔧 Dart-side Usage
+## 🔧 Dart Usage
 
 ```dart
 import 'package:flutter/material.dart';
@@ -44,24 +43,15 @@ import 'package:inmobi_cmp/inmobi_cmp.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1️⃣ Initialize with your InMobi pCode
   await InmobiCmp.init(
-    accountId: 'YOUR_PCODE',
-    gdpr: true,
+    packageId: 'com.yourcompany.yourapp',
+    pCode: 'YOUR_INMOBI_PCODE',
   );
 
-  // 2️⃣ (Optional) Listen for native consent events
-  const channel = MethodChannel('com.icon.inmobi_cmp');
+  const MethodChannel channel = MethodChannel('com.icon.inmobi_cmp');
   channel.setMethodCallHandler((call) async {
-    switch (call.method) {
-      case 'onCmpLoaded':
-        final info = call.arguments as Map;
-        debugPrint('CMP Loaded: $info');
-        break;
-      case 'onIABConsent':
-        debugPrint('IAB Consent: ${call.arguments}');
-        break;
-    // handle other callbacks as needed
+    if (call.method == 'onCmpEvent') {
+      debugPrint('CMP Event: ${call.arguments}');
     }
   });
 
@@ -69,16 +59,18 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('InMobi CMP Example')),
+        appBar: AppBar(title: const Text('InMobi CMP')),
         body: Center(
           child: ElevatedButton(
-            onPressed: () => InmobiCmp.showConsent(),
+            onPressed: () async {
+              await InmobiCmp.showConsent();
+            },
             child: const Text('Show Consent UI'),
           ),
         ),
@@ -88,108 +80,88 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-This covers the core Dart API:
+### Available Dart Methods
 
-- `InmobiCmp.init(accountId: String, gdpr: bool)`
-- `InmobiCmp.showConsent()`
-- `InmobiCmp.getConsentStatus()`
-
----
-
-## ⚙️ Plugin Structure
-
-```
-inmobi_cmp/
-├── lib/
-│   ├── inmobi_cmp.dart
-│   ├── inmobi_cmp_method_channel.dart
-│   └── inmobi_cmp_platform_interface.dart
-├── android/
-│   ├── build.gradle
-│   └── src/main/kotlin/com/icon/inmobi_cmp/InmobiCmpPlugin.kt
-└── ios/
-    ├── inmobi_cmp.podspec
-    ├── Frameworks/InMobiCMP.xcframework/
-    └── Classes/SwiftInmobiCmpPlugin.swift
+```dart
+InmobiCmp.init({ required String packageId, required String pCode })
+InmobiCmp.showConsent()
+InmobiCmp.getConsentStatus()
 ```
 
 ---
 
-## 🛠 Android Setup
+## ⚙️ Android Setup
 
-1. **Add AAR & Maven**
-    - Create `android/libs/` and drop `inmobicmp-2.2.2.aar`.
-    - Or use Maven: `implementation 'com.inmobi:inmobicmp:2.2.2'`.
+1. **Add AAR or Maven Dependency**
 
-2. **Update** `<plugin>/android/build.gradle`:
+   Option A — Maven:
+   ```groovy
+   implementation 'com.inmobi:inmobicmp:2.2.2'
+   ```
 
-   ```gradle
-   buildscript {
-     repositories { google(); mavenCentral(); flatDir { dirs 'libs' } }
-     dependencies { classpath 'com.android.tools.build:gradle:8.7.3' }
-   }
-   allprojects {
-     repositories { google(); mavenCentral(); flatDir { dirs 'libs' } }
-   }
-   apply plugin: 'com.android.library'
-
-   android {
-     compileSdk = 35
-     defaultConfig { minSdk = 21 }
-     consumerProguardFiles 'consumer-rules.pro'
-   }
-
-   dependencies {
+   Option B — Local AAR:
+   - Place `inmobicmp-2.2.2.aar` in `android/libs/`
+   - Then:
+     ```groovy
      implementation fileTree(dir: 'libs', include: ['*.aar'])
-     implementation 'com.inmobi:inmobicmp:2.2.2'
-     // AndroidX libraries...
-   }
-   ```
+     ```
 
-3. **ProGuard Rules** (`android/consumer-rules.pro`):
+2. **Proguard Rules**
 
+   Add to `android/consumer-rules.pro`:
    ```proguard
-   -keep class com.inmobi.cmp.ChoiceCmp { *; }
-   -keep interface com.inmobi.cmp.ChoiceCmpCallback { *; }
-   -keep class com.inmobi.cmp.model.* { *; }
-   -keep class com.inmobi.cmp.core.model.* { *; }
+   -keep class com.inmobi.cmp.** { *; }
+   -keep interface com.inmobi.cmp.** { *; }
    ```
 
-4. **Plugin Implementation**
-    - `android/src/main/kotlin/com/icon/inmobi_cmp/InmobiCmpPlugin.kt`
+3. **Native Plugin Events**
+
+   The plugin logs events back to Flutter through `onCmpEvent`. Expect messages like:
+   - `"CMP loaded: ..."`
+   - `"IAB vendor consent given: ..."`
+   - `"Non-IAB vendor consent given: ..."`
+   - `"CMP UI status changed: ..."`
+   - etc.
 
 ---
 
 ## 🍎 iOS Setup
 
 1. **Add Framework**
-    - Download `InMobiCMP.xcframework` from your portal.
-    - In `ios/Frameworks/`, place both Simulator and Device slices.
 
-2. **Podspec** (`ios/inmobi_cmp.podspec`):
+   - Download `InMobiCMP.xcframework` from the InMobi portal.
+   - Place it in `ios/Frameworks/`.
+
+2. **Update Podspec**
+
+   `ios/inmobi_cmp.podspec`:
 
    ```ruby
    Pod::Spec.new do |s|
-     s.name                 = 'inmobi_cmp'
-     s.version              = '0.1.0'
-     s.summary              = 'Flutter plugin for InMobi CMP'
-     s.platform             = :ios, '12.0'
-     s.source_files         = 'Classes/**/*'
-     s.vendored_frameworks  = 'Frameworks/InMobiCMP.xcframework'
-     s.dependency           = 'Flutter'
-     s.swift_version        = '5.0'
+     s.name             = 'inmobi_cmp'
+     s.version          = '0.1.0'
+     s.summary          = 'Flutter plugin for InMobi CMP'
+     s.description      = 'GDPR/CCPA compliance via InMobi CMP SDK'
+     s.homepage         = 'https://github.com/mz185/inmobi_cmp'
+     s.license          = { :type => 'MIT' }
+     s.author           = { 'Your Name' => 'you@example.com' }
+     s.source_files     = 'Classes/**/*'
+     s.vendored_frameworks = 'Frameworks/InMobiCMP.xcframework'
+     s.platform         = :ios, '12.0'
+     s.swift_version    = '5.0'
+     s.dependency       = 'Flutter'
    end
    ```
 
-3. **Plugin Implementation**
-    - `ios/Classes/SwiftInmobiCmpPlugin.swift`: uses `ChoiceCmp.shared`, `forceDisplayUI()`,
-      `getGDPRDataWithCompletion`, and implements `ChoiceCmpDelegate`.
+3. **Native Events**
+
+   Similar to Android, events are sent back to Flutter through `onCmpEvent`.
 
 ---
 
-## 🎯 Example App
+## ▶️ Example App
 
-An example Flutter app is under the `example/` directory. To run:
+Run the sample app included in the repository:
 
 ```bash
 cd example
@@ -199,12 +171,6 @@ flutter run
 
 ---
 
-## 📝 Changelog
+## 📃 License
 
-See [CHANGELOG.md](CHANGELOG.md) for details on releases.
-
----
-
-## 📖 License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT License. See [LICENSE](LICENSE) for details.
