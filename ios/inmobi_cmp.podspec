@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.platform         = :ios, '15.0'
   s.source_files     = 'Classes/**/*'
 
-  s.vendored_frameworks = 'Frameworks/InMobiCMP.xcframework'
+  s.dependency       'InMobiCMP', '2.3.1'
 
   s.dependency       'Flutter'
   s.swift_version    = '5.0'
