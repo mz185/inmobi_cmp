@@ -11,7 +11,8 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
 
   s.platform         = :ios, '15.0'
-  s.source_files     = 'Classes/**/*'
+  s.source_files     = 'inmobi_cmp/Sources/inmobi_cmp/**/*.swift'
+  s.resource_bundles = {'inmobi_cmp_privacy' => ['inmobi_cmp/Sources/inmobi_cmp/PrivacyInfo.xcprivacy']}
 
   s.dependency       'InMobiCMP', '2.3.1'
 
